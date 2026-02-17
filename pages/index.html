@@ -6,152 +6,152 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'CSS File/style.CSS' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-    <script src="{% static 'https://kit.fontawesome.com/ca73119b63.js' %}" crossorigin="anonymous"></script>
-    <title>MedEasy</title>
+    <title>{% block title %}MedEasy{% endblock %}</title>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <nav class="navbar back1 h-nav">
-        <ul class="nav-list v-class">
-            <div class="logo"><img src="{% static 'Img/Logo.png' %}" alt="Logo"></div>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            {% if user.is_authenticated %}
-            <li><a href="{% url 'DoctorDetails' %}">Book Apointment</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Book Apointment</a></li>
-            {% endif %}
-            {% if user.is_authenticated %}
-            <li><a href="{% url 'LabTest' %}">Book Lab Test</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Book Lab Test</a></li>
-            {% endif %}
-            <li><a href="{% url 'about' %}">About</a></li>
-        </ul>
-        <div class="rightNav v-class">
-            {% if user.is_authenticated %}
-            <li class="Hi"> Hi, {{user.first_name}} </li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Login/Signup</a></li>
-            {% endif %}
-        </div>
-        <div class="burger">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'Img/Logo.png' %}" alt="Logo" width="40" height="40"
+                    class="d-inline-block align-text-center">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %} active{% endif %}"
+                            aria-current="page" href="{% url 'home' %}">Home</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    {% with group_names=user.groups.all|join:',' %}
+                    {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %} active{% endif %}"
+                            href="{% url 'admin_dashboard' %}">Dashboard</a>
+                    </li>
+                    {% elif 'Doctors' in group_names %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'doctor_dashboard' %} active{% endif %}"
+                            href="{% url 'doctor_dashboard' %}">My Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'doctor_appointment_list' %} active{% endif %}"
+                            href="{% url 'doctor_appointment_list' %}">My Appointments</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'patient_appointments' %} active{% endif %}"
+                            href="{% url 'patient_appointments' %}">My Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'book_appointment' %} active{% endif %}"
+                            href="{% url 'book_appointment' %}">Book Appointment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'lab_test' %} active{% endif %}"
+                            href="{% url 'lab_test' %}">Book Lab Test</a>
+                    </li>
+                    {% endif %}
+                    {% endwith %}
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}?next={% url 'book_appointment' %}">
+                            Book Appointment
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}?next={% url 'lab_test' %}">
+                            Book Lab Test
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link{% if request.resolver_match.url_name == 'about' %} active{% endif %}"
+                            href="{% url 'about' %}">
+                            About
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    {% if user.is_authenticated %}
+                    <span class="navbar-text me-3">Hi, {{ user.first_name|default:user.username }}</span>
+                    {% if request.session.impersonator_id %}
+                    <a class="btn btn-outline-danger btn-sm" href="{% url 'stop_impersonation' %}">Stop
+                        Impersonation</a>
+                    {% else %}
+                    <a class="btn btn-outline-danger btn-sm" href="{% url 'logout' %}">Logout</a>
+                    {% endif %}
+                    {% else %}
+                    <a class="btn btn-primary btn-sm" href="{% url 'login' %}">Login/Signup</a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </nav>
-    
-    <section class="background firstsection">
-        <div class="box-main">
-            <div class="firsthalf">
-                    <p class="backcolor1 text-big ">ADVANTAGES OF THE MEDEASY CONSULT</p><br>
-                    <p class="text-small">In this highly mobile world at times personal scheduling of appointments can be challenging. And yet that shouldn't deprive you of the best medical care.</p> 
-                    <p class="text-small">MedEasy is an initiative by SGGS Students to bring world-class health care service to the location & time that suits you best. You could be travelling or tied up with your schedule - wherever and whenever - simply log-in and have access to world-class medical care.</p>
-                    <p class="text-small">With state-of-the-art technology & Services, we make these MedEasy as real as possible for you. Thus, you have for yourself the best of both worlds. MedEasy help you overcome the challenges of distance & time. Additionally, We provide comfort & convenience - everything at the click of a button.</p>
+
+    {% block content %}
+    {% endblock %}
+
+    {% if messages %}
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 11">
+        {% for message in messages %}
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {% if 'success' in message.tags %}
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    {% elif 'error' in message.tags %}
+                    <i class="fas fa-times-circle text-danger me-2"></i>
+                    {% else %}
+                    <i class="fas fa-info-circle text-info me-2"></i>
+                    {% endif %}
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="secondhalf">
-                <img src="{% static 'Img/istockphoto-1271328839-170667a.jpg' %}" alt="doctor image">
-                
-            </div>
         </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
-    </section>
-
-    <section class="background secondsection">
-        <div class="table-main">
-            <table class="firsttable">
-                <caption class="caption "><b><span class="backcolor2">You are in Safe Hands</span></b></caption>
-                <thead class="firstthead">
-                    <tr class="first-tr">
-                        <th><img src="{% static 'Img/domestic-1@1x.png' %}" alt="easy1"></th>
-                        <th><img src="{% static 'Img/dash@1x.png' %}" alt="dash1"></th>
-                        <th><img src="{% static 'Img/domestic-2@1x.png' %}" alt="easy2"></th>
-                        <th><img src="{% static 'Img/dash@1x.png' %}" alt="dash2"></th>
-                        <th><img src="{% static 'Img/domestic-3@1x.png' %}" alt="easy3"></th>
-                        <th><img src="{% static 'Img/dash@1x.png' %}" alt="dash3"></th>
-                        <th><img src="{% static 'Img/domestic-4@1x.png' %}" alt="easy4"></th>
-
-                    </tr>
-                    <tr class="second-tr">
-                        <td>Quick Consultation</td>
-                        <td> </td>
-                        <td>Book your appointment</td>
-                        <td> </td>
-                        <td>Treatment Cost</td>
-                        <td> </td>
-                        <td>Follow Up</td>
-                    </tr>
-                </thead>
-                <tbody class="firsttbody">
-                    <tr class="third-tr">
-                        <td>Get initial advise from a panel
-                            of specialists</td>
-                        <td> </td>
-                        <td>We get you an appointment with
-                            the best specialist within 24 hours</td>
-                        <td> </td>
-                        <td>Find out the best price for your
-                            treatment</td>
-                        <td> </td>
-                        <td>Follow up visits as advised
-                            by doctor</td>
-                    </tr>
-
-                </tbody>
-            </table>
+    <footer class="bg-dark text-center text-white py-3 mt-auto">
+        <div class="container">
+            <p class="mb-0">Copyright &copy; 2021 www.MedEasy.com - All rights reserved</p>
         </div>
-    </section>
-
-
-    <section class="section">
-        <div class="paras">
-            <p class="sectiontag text-big"><span class="backcolor2">Multispeciality Expertise</span></p>
-       <p class="sectionsubtag text-small">MedEasy brings together an expert team of specialists who collaborate with caring nurses to provide accurate diagnosis and medical care to patients. MedEasy has best team of doctors all over india which are best at there specialities. MedEasy provides you a genuine doctors having good experince.</p>
-        </div>
-        <div class="thumbnail"><img src="{% static 'Img/Doctors-health-team-group.jpg' %}" alt="doctor" class="imgfluid1"></div>
-        
-    </section>
-
-    <section class="section left">
-        <div class="paras">
-       <p class="sectiontag text-big">World-Class Quality</p>
-       <p class="sectionsubtag text-small">MedEasy provides you the best hospitals who is designed to meet national and international healthcare requirements and is committed to providing excellent patient care and quality medical care..</p>
-        </div>
-        <div class="thumbnail"><img src="{% static 'Img/istockphoto-1281627829-170667a.jpg' %}" alt="doctor" class="imgfluid"></div>
-        
-    </section>
-
-    <section class="section">
-        <div class="paras">
-       <p class="sectiontag text-big">State-Of-The-Art Infrastructure</p>
-       <p class="sectionsubtag text-small">The hospitals provided by MedEasy has state-of-the-art technological infrastructure and medical facilities that make medical care healthier, better and more comprehensive.</p>
-        </div>
-        <div class="thumbnail"><img src="{% static 'Img/About-Us-Our-Infrastructure-Pnue-1-1-e1614015178707.jpg' %}" alt="doctor" class="imgfluid"></div>
-        
-    </section>
-  
-
-    <section class="contact">
-        <hr>
-        <h2 class="cont1">Contact Us</h2><br>
-        <div>
-            <p class="telephone"><a href="mailto: pravinkulkarni440@gmail.com">Email: pravinkulkarni440@gmail.com</a></p><br>
-            <p class="telephone"><a href="tel: +91-1001558888">Mobile: +91-9552403843</a></p>
-        </div>
-
-    </section>
-
-    <footer>
-        <p class="text-footer">Copyright &copy; 2021 www.MedEasy.com - All rights reserved</p>
     </footer>
-    
-    <!-- <script src="/js/respn.js"></script> -->
-    
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/ca73119b63.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/form_validation.js' %}" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        var toastList = toastElList.map(function (toastEl) {
+            var toast = new bootstrap.Toast(toastEl, { autohide: true, delay: 5000 });
+            toast.show();
+            return toast;
+        });
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
 </body>
 
 </html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Lab Test Request has been Cancelled</title>
+    <style>
+        body { font-family: sans-serif; color: #333; }
+        .container { padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: auto; }
+        h2 { color: #dc3545; } /* Red for cancellation */
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        strong { color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Lab Test Request Cancelled</h2>
+        <p>Hi {{ user.first_name }},</p>
+        <p>This is a confirmation that your lab test request has been cancelled.</p>
+        <h3>Cancelled Request Details:</h3>
+        <ul>
+            <li><strong>Test Type:</strong> {{ lab_test.test_type }}</li>
+            <li><strong>Location:</strong> {{ lab_test.location }}</li>
+        </ul>
+        <hr>
+        <p>If you did not request this cancellation, please contact our support. You can submit a new request at any time from our website.</p>
+        <p>Thank you,<br>The MedEasy Team</p>
+    </div>
+</body>
+</html>

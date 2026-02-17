@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Lab Test Confirmation</title>
+    <style>
+        body { font-family: sans-serif; color: #333; }
+        .container { padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: auto; }
+        h2 { color: #0d6efd; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        strong { color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Lab Test Request Submitted!</h2>
+        <p>Hi {{ user.first_name }},</p>
+        <p>Thank you for booking a lab test with MedEasy. Your request has been submitted.</p>
+        <h3>Request Details:</h3>
+        <ul>
+            <li><strong>Test Type:</strong> {{ lab_test.test_type }}</li>
+            <li><strong>Location:</strong> {{ lab_test.location }}</li>
+            <li><strong>Status:</strong> {{ lab_test.status }}</li>
+        </ul>
+        <hr>
+        <p>Our team will contact you shortly to schedule your test. You can view the status of this request in your dashboard.</p>
+        <p>Thank you,<br>The MedEasy Team</p>
+    </div>
+</body>
+</html>

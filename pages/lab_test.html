@@ -1,0 +1,74 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}MedEasy Lab Test{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Book a Lab Test</h3>
+                    <form action="{% url 'lab_test' %}" method='post'>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                <select class="form-select" id="location" name='location' required data-ajax-url="{% url 'api_get_lab_locations' %}">
+                                    <option value="" selected></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="type_test" class="form-label">Type of Test</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-vial"></i></span>
+                                <select class="form-select" id="type_test" name='type_test' required data-ajax-url="{% url 'api_search_lab_tests' %}">
+                                    <option value="" selected></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    function initializeSelect2(selector, placeholder) {
+        $(selector).select2({
+            theme: "bootstrap-5",
+            placeholder: placeholder,
+            minimumInputLength: 1, // Only trigger search after 1 character is typed
+            ajax: {
+                url: $(selector).data('ajax-url'),
+                dataType: 'json',
+                delay: 250, // Debounce API calls by 250ms
+                data: function (params) {
+                    // `params.term` is the search term from Select2
+                    return {
+                        term: params.term || ''
+                    };
+                },
+                processResults: function (data) {
+                    return { results: data.results };
+                },
+                cache: true
+            }
+        });
+    }
+
+    initializeSelect2('#location', 'Select Your Location');
+    initializeSelect2('#type_test', 'Choose Your Lab Test');
+});
+</script>
+{% endblock %}

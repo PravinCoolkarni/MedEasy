@@ -1,12 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body color='cyan'>
-    <h1>You Have Suceessfully Book An Apointment</h1>
-</body>
-</html>
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}Appointment Booked Successfully{% endblock %}
+
+{% block content %}
+<div class="container text-center my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-success">
+                <div class="card-body p-5">
+                    <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+                    <h1 class="display-6">Appointment Booked!</h1>
+                    <p class="lead text-muted">
+                        Your appointment request has been successfully submitted. The doctor will confirm it shortly.
+                    </p>
+                    <hr class="my-4">
+                    <p>You can view the status of your appointment in your dashboard.</p>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <a href="{% url 'patient_appointments' %}" class="btn btn-primary btn-lg px-4 gap-3">View My Appointments</a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg px-4">Go to Homepage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="{% static 'js/book_confirmation.js' %}"></script>
+{% endblock %}

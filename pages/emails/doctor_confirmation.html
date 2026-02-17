@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Appointment is Confirmed!</title>
+    <style>
+        body { font-family: sans-serif; color: #333; }
+        .container { padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: auto; }
+        h2 { color: #198754; } /* Green for confirmation */
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        strong { color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Appointment Confirmed!</h2>
+        <p>Hi {{ user.first_name }},</p>
+        <p>Great news! Your appointment has been confirmed by the doctor.</p>
+        <h3>Confirmed Appointment Details:</h3>
+        <ul>
+            <li><strong>Doctor:</strong> Dr. {{ doctor.name }}</li>
+            <li><strong>Date:</strong> {{ appointment.appointment_date|date:"F d, Y" }}</li>
+            <li><strong>Time:</strong> {{ appointment.appointment_time|time:"g:i A" }}</li>
+        </ul>
+        <hr>
+        <p>Please be ready for your appointment. If you need to cancel or reschedule, you can do so from your dashboard.</p>
+        <p>Thank you,<br>The MedEasy Team</p>
+    </div>
+</body>
+</html>

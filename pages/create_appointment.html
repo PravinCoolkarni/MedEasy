@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}Select Appointment Time{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+            <h2 class="text-center mb-4">Book Appointment</h2>
+            
+            <!-- Doctor Details Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Doctor Details</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ doctor.name }}</h5>
+                    <p class="card-text mb-1"><strong>Speciality:</strong> {{ doctor.expert }}</p>
+                    <p class="card-text mb-1"><strong>Location:</strong> {{ doctor.location }}</p>
+                    <p class="card-text mb-1"><strong>Consultation Fee:</strong> ₹{{ doctor.price }}</p>
+                    <p class="card-text"><strong>Rating:</strong> 
+                        {% if doctor.rating %}
+                            <i class="fas fa-star text-warning me-1"></i>{{ doctor.rating }} / 5.0
+                        {% else %}
+                            Not Rated
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Time Slot Selection Form -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Select an Available Time Slot</h4>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'create_appointment' doctor.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="appointment-date" class="form-label">Select Date</label>
+                            <input type="date" class="form-control" id="appointment-date" name="appointment_date" 
+                                   value="{{ appointment_date|date:'Y-m-d' }}" 
+                                   required>
+                        </div>
+
+                        {% if time_slots %}
+                            <p class="text-muted">
+                                The doctor is available from <strong>{{ doctor.from_time|time:"g:i A" }}</strong> to <strong>{{ doctor.to_time|time:"g:i A" }}</strong>.
+                                Please select a time below.
+                            </p>
+                            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-2">
+                                {% for slot_start, slot_end in time_slots %}
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="appointment_time" id="time-{{ forloop.counter }}" value="{{ slot_start|time:'H:i' }}" required 
+                                            {% if slot_start in booked_slots %}disabled{% endif %}>
+                                        <label class="form-check-label {% if slot_start in booked_slots %}text-muted text-decoration-line-through{% endif %}" for="time-{{ forloop.counter }}">
+                                            {{ slot_start|time:"g:i A" }} - {{ slot_end|time:"g:i A" }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Confirm Appointment</button>
+                            </div>
+                        {% else %}
+                            <p class="text-center text-danger fw-bold">No available time slots for this doctor today.</p>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/create_appointment.js' %}"></script>
+{% endblock %}

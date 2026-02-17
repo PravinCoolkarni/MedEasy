@@ -20,24 +20,35 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t*tn6+0&)xv1-xl58x9$d4kl40p@px7va2x_it#74dl$4)a&79'
+# In production, this will be read from an environment variable.
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Set to False in production by setting a DJANGO_DEBUG environment variable to 'False'
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+# DEBUG = True
 
-ALLOWED_HOSTS = []
+# In development, if the secret key is not set in the environment, use a default weak key.
+# In production (when DEBUG=False), if SECRET_KEY is None, Django will refuse to start.
+if DEBUG and not SECRET_KEY:
+    SECRET_KEY = 'django-insecure-t*tn6+0&)xxv1-xl58x9$d4kl40p@px7va2x_it#74dl$4)a&79'
+
+# Replace 'your-username' with your actual PythonAnywhere username
+ALLOWED_HOSTS = ['MedEasy.pythonanywhere.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'med.apps.MedConfig',
+    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +67,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR,'pages')],
+        # 'DIRS': [BASE_DIR / 'pages'],  # Debug Version
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,23 +83,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'medeasy.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'medeasy',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': 'ashu2001',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -123,12 +124,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS=[
-    os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / "static"  # This is for collectstatic output only
+STATICFILES_DIRS = [
+BASE_DIR / "assets",   # Your source static files
 ]
-STATIC_ROOT=os.path.join(BASE_DIR, 'assets')
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# --- Email Configuration ---
+# In production, set these as environment variables.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')      # Your Gmail address
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Your 16-digit Gmail App Password
+# EMAIL_HOST_USER = 'medeasy.notification@gmail.com'      
+# EMAIL_HOST_PASSWORD = 'lymv mpsa lvuf jcuo'

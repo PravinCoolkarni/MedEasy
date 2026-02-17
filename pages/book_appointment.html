@@ -1,0 +1,87 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}MedEasy Book{% endblock %}
+
+{% block content %}
+    
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Book an Appointment</h3>
+                    <form class="needs-validation" id="appointment-form" action="{% url 'book_appointment' %}" method="post" novalidate
+                        {% if user.is_authenticated %}
+                            data-user-name="{{ user.first_name }} {{ user.last_name }}"
+                            data-user-age="{{ user.profile.age|default:'' }}"
+                            data-user-mobile="{{ user.profile.mobile|default:'' }}"
+                        {% endif %}
+                    >
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label d-block">Booking For</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="booking_for" id="booking_for_self" value="self" checked>
+                                <label class="form-check-label" for="booking_for_self">Yourself</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="booking_for" id="booking_for_other" value="other">
+                                <label class="form-check-label" for="booking_for_other">Someone Else</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="patient_name" class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" id="patient_name" name="patient_name" placeholder="Enter patient's full name" required maxlength="50">
+                            <div class="invalid-feedback">
+                                Please enter the patient's name.
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" placeholder="Age" required min="1">
+                                <div class="invalid-feedback">
+                                    Please provide a valid age.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="mobile" class="form-label">Mobile Number</label>
+                                <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="10-digit mobile number" required pattern="[0-9]{10}">
+                                <div class="invalid-feedback">
+                                    Please provide a valid 10-digit mobile number.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="disease" class="form-label">Type of Disease/Symptom</label>
+                            <select id="disease" name="disease" class="form-select" required data-ajax-url="{% url 'api_search_diseases' %}">
+                                <option value="" selected></option> <!-- placeholder for select2 -->
+                            </select>
+                            <div class="invalid-feedback">Please select a disease or symptom.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <select id="location" name="location" class="form-select" required data-ajax-url="{% url 'api_get_locations' %}">
+                                <option value="" selected></option> <!-- placeholder for select2 -->
+                            </select>
+                            <div class="invalid-feedback">Please select a location.</div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary">Book Appointment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/appointment.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Appointment Confirmation</title>
+    <style>
+        body { font-family: sans-serif; color: #333; }
+        .container { padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: auto; }
+        h2 { color: #0d6efd; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        strong { color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Appointment Request Submitted!</h2>
+        <p>Hi {{ user.first_name }},</p>
+        <p>Thank you for booking an appointment with MedEasy. Your request has been sent to the doctor for confirmation.</p>
+        <h3>Appointment Details:</h3>
+        <ul>
+            <li><strong>Doctor:</strong> Dr. {{ doctor.name }}</li>
+            <li><strong>Date:</strong> {{ appointment.appointment_date|date:"F d, Y" }}</li>
+            <li><strong>Time:</strong> {{ appointment.appointment_time|time:"g:i A" }}</li>
+            <li><strong>Patient Name:</strong> {{ appointment.patient_name }}</li>
+            <li><strong>Symptom/Disease:</strong> {{ appointment.disease }}</li>
+        </ul>
+        <hr>
+        <p>You can view the status of this appointment in your dashboard at any time.</p>
+        <p>Thank you,<br>The MedEasy Team</p>
+    </div>
+</body>
+</html>

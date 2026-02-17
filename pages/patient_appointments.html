@@ -1,0 +1,159 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Appointments</h2>
+        <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Book New Appointment
+        </a>
+    </div>
+    <p class="text-muted">Here is a list of your upcoming and past doctor appointments and lab tests.</p>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myBookingsTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'appointments' %}active{% endif %}" id="appointments-tab" data-bs-toggle="tab" data-bs-target="#appointments" type="button" role="tab" aria-controls="appointments" aria-selected="true">Doctor Appointments</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'lab-tests' %}active{% endif %}" id="lab-tests-tab" data-bs-toggle="tab" data-bs-target="#lab-tests" type="button" role="tab" aria-controls="lab-tests" aria-selected="false">Lab Tests</button>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content" id="myBookingsTabContent">
+        <!-- Appointments Tab -->
+        <div class="tab-pane fade {% if active_tab == 'appointments' %}show active{% endif %}" id="appointments" role="tabpanel" aria-labelledby="appointments-tab">
+            <div class="card card-body border-top-0 rounded-bottom">
+                <form method="get" class="mb-4">
+                    <input type="hidden" name="tab" value="appointments">
+                    <div class="row g-2">
+                        <div class="col-md-4">{{ appointment_filter.form.doctor__name }}</div>
+                        <div class="col-md-3">{{ appointment_filter.form.disease }}</div>
+                        <div class="col-md-3">{{ appointment_filter.form.status }}</div>
+                        <div class="col-md-2">
+                            <div class="d-grid gap-2 d-lg-flex">
+                                <button type="submit" class="btn btn-primary flex-grow-1">Filter</button>
+                                <a href="{% url 'patient_appointments' %}?tab=appointments" class="btn btn-outline-secondary" title="Clear Filters"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Doctor Name</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Appointment Date & Time</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appt in appointment_filter.qs %}
+                            <tr>
+                                <td>{{ appt.doctor.name }}</td>
+                                <td>{{ appt.doctor.location }}</td>
+                                <td>{{ appt.appointment_date|date:"d M Y" }} at {{ appt.appointment_time|time:"g:i A" }}</td>
+                                <td>
+                                    {% if appt.status == 'Pending' %}<span class="badge bg-warning text-dark">{{ appt.status }}</span>
+                                    {% elif appt.status == 'Confirmed' %}<span class="badge bg-success">{{ appt.status }}</span>
+                                    {% elif appt.status == 'Cancelled' %}<span class="badge bg-danger">{{ appt.status }}</span>
+                                    {% elif appt.status == 'Completed' %}<span class="badge bg-info text-dark">{{ appt.status }}</span>
+                                    {% else %}<span class="badge bg-secondary">{{ appt.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if appt.status == 'Pending' or appt.status == 'Confirmed' %}
+                                    <a href="{% url 'reschedule_appointment' appt.id %}" class="btn btn-primary btn-sm mb-1">Reschedule</a>
+                                    <button type="button" class="btn btn-danger btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-action-url="{% url 'cancel_appointment_patient' appt.id %}" data-modal-body="Are you sure you want to cancel this appointment?">Cancel</button>
+                                    {% else %}-{% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="text-center">You have no appointments matching your criteria.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lab Tests Tab -->
+        <div class="tab-pane fade {% if active_tab == 'lab-tests' %}show active{% endif %}" id="lab-tests" role="tabpanel" aria-labelledby="lab-tests-tab">
+            <div class="card card-body border-top-0 rounded-bottom">
+                <form method="get" class="mb-4">
+                    <input type="hidden" name="tab" value="lab-tests">
+                    <div class="row g-2">
+                        <div class="col-md-4">{{ lab_test_filter.form.test_type }}</div>
+                        <div class="col-md-3">{{ lab_test_filter.form.location }}</div>
+                        <div class="col-md-3">{{ lab_test_filter.form.status }}</div>
+                        <div class="col-md-2">
+                            <div class="d-grid gap-2 d-lg-flex">
+                                <button type="submit" class="btn btn-primary flex-grow-1">Filter</button>
+                                <a href="{% url 'patient_appointments' %}?tab=lab-tests" class="btn btn-outline-secondary" title="Clear Filters"><i class="fas fa-times"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Test Type</th>
+                                <th scope="col">Location</th>
+                                <th scope="col">Requested On</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for test in lab_test_filter.qs %}
+                            <tr>
+                                <td>{{ test.test_type }}</td>
+                                <td>{{ test.location }}</td>
+                                <td>{{ test.created_at|date:"d M Y, g:i A" }}</td>
+                                <td>
+                                    {% if test.status == 'Pending' %}<span class="badge bg-warning text-dark">{{ test.status }}</span>
+                                    {% elif test.status == 'Scheduled' %}<span class="badge bg-primary">{{ test.status }}</span>
+                                    {% elif test.status == 'Completed' %}<span class="badge bg-success">{{ test.status }}</span>
+                                    {% elif test.status == 'Cancelled' %}<span class="badge bg-danger">{{ test.status }}</span>
+                                    {% else %}<span class="badge bg-secondary">{{ test.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if test.status == 'Pending' or test.status == 'Scheduled' %}
+                                    <button type="button" class="btn btn-danger btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-action-url="{% url 'cancel_lab_test' test.id %}" data-modal-body="Are you sure you want to cancel this lab test request?">Cancel</button>
+                                    {% else %}-{% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="text-center">You have no lab test requests matching your criteria.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal for Cancellation -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <div class="modal-body" id="confirmationModalBody"></div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Go Back</button><a href="#" id="confirmActionButton" class="btn btn-danger">Yes, Cancel</a></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/patient_appointments.js' %}"></script>
+{% endblock %}

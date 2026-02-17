@@ -1,75 +1,44 @@
+{% extends "index.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'CSS File/style.CSS' %}">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <script src="https://kit.fontawesome.com/ca73119b63.js" crossorigin="anonymous"></script>
-    <title>Login/Signup</title>
-</head>
+{% block title %}MedEasy Book Appointment{% endblock %}
 
-<body>
-    <nav class="navbar back1 h-nav">
-        <ul class="nav-list v-class">
-            <div class="logo"><img src="{% static 'Img/Logo.png' %}" alt="Logo"></div>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            {% if user.is_authenticated %}
-            <li><a href="{% url 'DoctorDetails' %}">Book Apointment</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Book Apointment</a></li>
-            {% endif %}
-            {% if user.is_authenticated %}
-            <li><a href="{% url 'LabTest' %}">Book Lab Test</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Book Lab Test</a></li>
-            {% endif %}
-            <li><a href="{% url 'about' %}">About</a></li>
-        </ul>
-        <div class="rightNav v-class">
-            {% if user.is_authenticated %}
-            <li class="Hi"> Hi, {{user.first_name}} </li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Login/Signup</a></li>
-            {% endif %}
-        </div>
-        <div class="burger">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-
-        </div>
-    </nav>
-
-    <section>
-
-        <div class="Login">
-
-            <form action="login" method="post">
-                {% csrf_token %}
-                <input class="login1" type="text" name='username' placeholder="Username"><br><br><br>
-                <input class="login1-2" type="password" name='password' placeholder="Password"><br>
-                <button type="submit" class="login2">Login</button>
-                
-                <div>
-                    {% for message in messages %}
-                    <h3>{{message}}</h3>
-                    {% endfor %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Login</h3>
+                    
+                    <form class="needs-validation" action="{% url 'login' %}" method="post" novalidate>
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.GET.next }}">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name='username' placeholder="Enter your username" required>
+                            <div class="invalid-feedback">
+                                Please enter your username.
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name='password' placeholder="Enter your password" required>
+                            <div class="invalid-feedback">
+                                Please enter your password.
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-
+                <div class="card-footer text-center py-3">
+                    <small>Don't have an account? <a href="{% url 'new_account' %}">Create one</a></small>
+                </div>
+            </div>
         </div>
+    </div>
+</div>
 
-        <div class="account">
-            <a href="{% url 'NewAccount' %}">Create an Account</a>
-        </div>
-
-    </section>
-
-</body>
-
-</html>
+{% endblock %}

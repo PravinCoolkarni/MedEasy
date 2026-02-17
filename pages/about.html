@@ -1,100 +1,44 @@
-{% load static%}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'CSS File/style.CSS' %}">
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-    <script src="https://kit.fontawesome.com/ca73119b63.js" crossorigin="anonymous"></script>
-    <title>About Us</title>
-</head>
-<body>
-    <nav class="navbar back1 h-nav">
-        <ul class="nav-list v-class">
-            <div class="logo"><img src="{% static 'Img/Logo.png' %}" alt="Logo"></div>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            {% if user.is_authenticated %}
-            <li><a href="{% url 'DoctorDetails' %}">Book Apointment</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Book Apointment</a></li>
-            {% endif %}
-            {% if user.is_authenticated %}
-            <li><a href="{% url 'LabTest' %}">Book Lab Test</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Book Lab Test</a></li>
-            {% endif %}
-            <li><a href="{% url 'about' %}">About</a></li>
-        </ul>
-        <div class="rightNav v-class">
-            {% if user.is_authenticated %}
-            <li class="Hi"> Hi, {{user.first_name}} </li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Login/Signup</a></li>
-            {% endif %}
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}MedEasy About{% endblock %}
+
+{% block content %}
+   
+<div class="container my-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-7">
+            <h2 class="display-6">About The Project</h2>
+            <p class="lead">This website was created by a student of Shri Guru Gobind Singhji Institute of Engineering & Technology, Vishnupuri, Nanded as a project to apply and showcase web development skills.</p>
         </div>
-        <div class="burger">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-
+        <div class="col-md-5 text-center">
+            <img class="img-fluid rounded-circle shadow-sm" src="{% static 'Img/download.jpg' %}" alt="SGGSIE&T Logo" style="max-width: 450px;">
         </div>
-    </nav>
-
-    <section class="About">
-        
-
-        <div class="About1">
-            <p>The website was made by student of Shri Guru Gobind Singhji Institute of Engineering & technology, Vishnupuri, Nanded.</p>
+    </div>
+    <hr class="my-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-7 order-md-2">
+            <h2 class="display-6">About The Developer</h2>
+            <p class="lead"><b>Pravin Kulkarni</b> is the developer of this website. He is currently pursuing a B.Tech in Computer Science Engineering from Shri Guru Gobind Singhji Institute of Engineering & Technology, Vishnupuri, Nanded.</p>
         </div>
-
-        <div class="About2">
-            <img class="About2img" src="{% static 'Img/download.jpg' %}" alt="Developer">
+        <div class="col-md-5 order-md-1 text-center">
+            <img class="img-fluid rounded-circle shadow-sm" src="{% static 'Img/download2.png' %}" alt="Pravin Kulkarni" style="max-width: 300px;">
         </div>
+    </div>
+</div>
 
-       
-    </section>
-
-    <section class="About left">
-        <div class="About1">
-            <p>Developer of the website designed the site as a project.</p>
-        </div>
-        
-        <div class="About2">
-            <img class="About2img" src="{% static 'Img/download (1).jpg' %}" alt="Developer">
-        </div>
-    </section>
-
-    <section class="About">
-        
-
-        <div class="About1">
-            <p><b>Pravin Kulkarni</b> is the developer of these website. He is currently purchusing B.Tech in Computer Science Engineering from Shri Guru Gobind Singhji Institute of Engineering & technology, Vishnupuri, Nanded.</p>
-        </div>
-
-        <div class="About2">
-            <img class="About2img" src="{% static 'Img/download2.png' %}" alt="Developer">
-        </div>
-
-       
-    </section>
-
-    <section class="contact">
-        <hr>
-        <h2 class="cont1">Contact Us</h2><br>
-        <div>
-            <p class="telephone"><a href="mailto: pravinkulkarni440@gmail.com">Email: pravinkulkarni440@gmail.com</a></p><br>
-            <p class="telephone"><a href="tel: +91-1001558888">Mobile: +91-9552403843</a></p>
-        </div>
-
-    </section>
-    
-    <footer>
-        <p class="text-footer">Copyright &copy; 2021 www.MedEasy.com - All rights reserved</p>
-    </footer>
+<div class="bg-light py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Contact Us</h2>
+        <p class="lead">
+            <i class="fas fa-envelope me-2"></i>
+            <a href="mailto:pravinkulkarni440@gmail.com" class="text-decoration-none">pravinkulkarni440@gmail.com</a>
+        </p>
+        <p class="lead">
+            <i class="fas fa-phone me-2"></i>
+            <a href="tel:+919552403843" class="text-decoration-none">+91 9552 403 843</a>
+        </p>
+    </div>
+</div>
  
-</body>
-
-</html>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}MedEasy Home{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5 justify-content-center">
+        <div class="col-12 col-sm-8 col-lg-6">
+            <img src="{% static 'Img/istockphoto-1271328839-170667a.jpg' %}"
+                class="d-block mx-lg-auto img-fluid rounded-circle" alt="Doctor Image" width="700"
+                height="500" loading="lazy">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">Advantages of MedEasy Consult</h1>
+            <p class="lead">In this highly mobile world, personal scheduling of appointments can be challenging. MedEasy
+                is an initiative by SGGS Students to bring world-class health care to you, wherever and whenever you
+                need it.</p>
+            <p>With state-of-the-art technology, we make virtual consultations as real as possible, helping you overcome
+                the challenges of distance and time with comfort and convenience.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container px-4 py-5 bg-light rounded">
+    <h2 class="pb-2 border-bottom text-center">You Are in Safe Hands</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-4 text-center">
+        <div class="feature col">
+            <div class="feature-icon mb-3">
+                <img src="{% static 'Img/domestic-1@1x.png' %}" alt="Quick Consultation" height="64">
+            </div>
+            <h5>Quick Consultation</h5>
+            <p class="text-muted">Get initial advice from a panel of specialists.</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon mb-3">
+                <img src="{% static 'Img/domestic-2@1x.png' %}" alt="Book Appointment" height="64">
+            </div>
+            <h5>Book Your Appointment</h5>
+            <p class="text-muted">We get you an appointment with the best specialist within 24 hours.</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon mb-3">
+                <img src="{% static 'Img/domestic-3@1x.png' %}" alt="Treatment Cost" height="64">
+            </div>
+            <h5>Treatment Cost</h5>
+            <p class="text-muted">Find out the best price for your treatment.</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon mb-3">
+                <img src="{% static 'Img/domestic-4@1x.png' %}" alt="Follow Up" height="64">
+            </div>
+            <h5>Follow Up</h5>
+            <p class="text-muted">Follow up visits as advised by your doctor.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Feature Sections -->
+<div class="container my-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-7">
+            <h2>Multispeciality Expertise</h2>
+            <p class="lead">MedEasy brings together an expert team of specialists and caring nurses to provide accurate
+                diagnosis and medical care. We provide you with genuine, experienced doctors from all over India.</p>
+        </div>
+        <div class="col-md-5">
+            <img src="{% static 'Img/Doctors-health-team-group.jpg' %}" alt="Doctor Team" class="img-fluid rounded">
+        </div>
+    </div>
+    <div class="row align-items-center mb-5">
+        <div class="col-md-7 order-md-2">
+            <h2>World-Class Quality</h2>
+            <p class="lead">MedEasy connects you with the best hospitals, designed to meet national and international
+                healthcare standards and committed to providing excellent patient care.</p>
+        </div>
+        <div class="col-md-5 order-md-1">
+            <img src="{% static 'Img/istockphoto-1281627829-170667a.jpg' %}" alt="Hospital Quality"
+                class="img-fluid rounded">
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-md-7">
+            <h2>State-Of-The-Art Infrastructure</h2>
+            <p class="lead">The hospitals provided by MedEasy have state-of-the-art infrastructure and medical
+                facilities that make medical care healthier, better, and more comprehensive.</p>
+        </div>
+        <div class="col-md-5">
+            <img src="{% static 'Img/About-Us-Our-Infrastructure-Pnue-1-1-e1614015178707.jpg' %}"
+                alt="Hospital Infrastructure" class="img-fluid rounded">
+        </div>
+    </div>
+</div>
+
+{% endblock %}
