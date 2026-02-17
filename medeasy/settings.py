@@ -32,8 +32,9 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 if DEBUG and not SECRET_KEY:
     SECRET_KEY = 'django-insecure-t*tn6+0&)xxv1-xl58x9$d4kl40p@px7va2x_it#74dl$4)a&79'
 
-# Replace 'your-username' with your actual PythonAnywhere username
-ALLOWED_HOSTS = ['MedEasy.pythonanywhere.com']
+# The hostname for your PythonAnywhere site, read from an environment variable.
+# Your username is 'medeasy' (all lowercase).
+ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOSTS', 'medeasy.pythonanywhere.com')]
 
 
 # Application definition
