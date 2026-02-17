@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User, Group
 from django.db import transaction
 from accounts.models import Profile
-from med.models import Doctors
+from med.models import Doctor
 
 class Command(BaseCommand):
     help = 'Seeds the database with a large number of dummy user records.'
@@ -77,9 +77,9 @@ class Command(BaseCommand):
         patient_count = len(created_users)
         self.stdout.write(self.style.SUCCESS(f'Successfully created {patient_count} patient user records.'))
 
-        # --- Create users from Doctors objects ---
+        # --- Create users from Doctor objects ---
         self.stdout.write('Creating user accounts for doctors...')
-        doctors = Doctors.objects.all()
+        doctors = Doctor.objects.all()
         if not doctors.exists():
             self.stdout.write(self.style.WARNING('No doctors found in the database. Run `seed_doctors` first. Skipping doctor user creation.'))
         else:

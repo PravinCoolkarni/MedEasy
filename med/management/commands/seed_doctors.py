@@ -2,7 +2,7 @@ import random
 from decimal import Decimal
 from datetime import time
 from django.core.management.base import BaseCommand
-from med.models import Doctors
+from med.models import Doctor
 
 class Command(BaseCommand):
     help = 'Seeds the database with dummy doctor records.'
@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         # To avoid creating duplicate doctors, we'll clear the table first.
         self.stdout.write('Deleting existing doctor records...')
-        Doctors.objects.all().delete()
+        Doctor.objects.all().delete()
 
         locations = [
             "Aurangabad", "Beed", "Latur", "Osmanabad", "Solapur", "Pune", "Mumbai",
@@ -44,7 +44,7 @@ class Command(BaseCommand):
                     first_name, last_name, gender = random.choice(doctor_names)
                     name = f"Dr. {first_name} {last_name}"
 
-                    Doctors.objects.create(
+                    Doctor.objects.create(
                         name=name,
                         expert=spec,
                         location=loc,
@@ -56,4 +56,4 @@ class Command(BaseCommand):
                         to_time=time(random.randint(17, 20), random.choice([0, 30]))
                     )
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully created {Doctors.objects.count()} doctor records.'))
+        self.stdout.write(self.style.SUCCESS(f'Successfully created {Doctor.objects.count()} doctor records.'))
