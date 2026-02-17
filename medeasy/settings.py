@@ -26,7 +26,6 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 # Set to False in production by setting a DJANGO_DEBUG environment variable to 'False'
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-# DEBUG = True
 
 # In development, if the secret key is not set in the environment, use a default weak key.
 # In production (when DEBUG=False), if SECRET_KEY is None, Django will refuse to start.
@@ -66,8 +65,7 @@ ROOT_URLCONF = 'medeasy.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'pages')],
-        # 'DIRS': [BASE_DIR / 'pages'],  # Debug Version
+        'DIRS': [BASE_DIR / 'pages'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,5 +139,3 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')      # Your Gmail address
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')  # Your 16-digit Gmail App Password
-# EMAIL_HOST_USER = 'medeasy.notification@gmail.com'      
-# EMAIL_HOST_PASSWORD = 'lymv mpsa lvuf jcuo'
