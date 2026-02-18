@@ -27,7 +27,7 @@ class Command(BaseCommand):
             'Kumar', 'Yadav', 'Reddy', 'Naidu', 'Rao'
         ]
 
-        user_count = random.randint(3000, 4000)
+        user_count = random.randint(500, 1000)
         self.stdout.write(f'Preparing to create {user_count} new dummy users...')
 
         users_to_create = []
@@ -48,18 +48,26 @@ class Command(BaseCommand):
             user.set_password('password123')
             users_to_create.append(user)
 
+        # Keep track of the usernames we are about to create
+        usernames_to_create = [u.username for u in users_to_create]
+
         self.stdout.write('Bulk creating users...')
         # Use ignore_conflicts to prevent errors on the rare chance of a username collision
-        created_users = User.objects.bulk_create(users_to_create, batch_size=1000, ignore_conflicts=True)
-        self.stdout.write(f'Successfully created {len(created_users)} new users.')
+        User.objects.bulk_create(users_to_create, batch_size=500, ignore_conflicts=True)
+        self.stdout.write(f'Bulk create operation completed.')
 
+        # In Django < 4.0, bulk_create doesn't return object PKs on many databases.
+        # We must re-fetch the users to get their IDs before creating many-to-many relationships.
+        self.stdout.write('Retrieving created users to assign groups...')
+        created_users = User.objects.filter(username__in=usernames_to_create)
+        self.stdout.write(f'Successfully created {len(created_users)} new users.')
         # --- Bulk create through-table records for groups ---
         self.stdout.write('Assigning users to the Patients group...')
         UserGroup = User.groups.through
         user_group_relations = [
             UserGroup(user_id=user.id, group_id=patients_group.id) for user in created_users
         ]
-        UserGroup.objects.bulk_create(user_group_relations, batch_size=1000, ignore_conflicts=True)
+        UserGroup.objects.bulk_create(user_group_relations, batch_size=500, ignore_conflicts=True)
 
         # --- Bulk create profiles ---
         self.stdout.write('Creating user profiles...')
