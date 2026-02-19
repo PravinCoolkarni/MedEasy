@@ -133,6 +133,28 @@
         </div>
     </footer>
 
+    <!-- Session Timeout Modal -->
+    <div class="modal fade" id="sessionTimeoutModal" tabindex="-1" aria-labelledby="sessionTimeoutModalLabel"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sessionTimeoutModalLabel">Session Timeout Warning</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Your session is about to expire due to inactivity. You will be logged out in <span
+                            id="sessionTimeoutCountdown">60</span> seconds.</p>
+                    <p>Do you want to stay logged in?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="logoutBtn">Log Out Now</button>
+                    <button type="button" class="btn btn-primary" id="stayLoggedInBtn">Stay Logged In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/ca73119b63.js" crossorigin="anonymous"></script>
@@ -151,6 +173,7 @@
     </script>
 
     {% block scripts %}
+      <script src="{% static 'js/session_timeout.js' %}"></script>
     {% endblock %}
 </body>
 

@@ -28,20 +28,27 @@
         <!-- Appointments Tab -->
         <div class="tab-pane fade {% if active_tab == 'appointments' %}show active{% endif %}" id="appointments" role="tabpanel" aria-labelledby="appointments-tab">
             <div class="card card-body border-top-0 rounded-bottom">
-                <form method="get" class="mb-4">
-                    <input type="hidden" name="tab" value="appointments">
-                    <div class="row g-2">
-                        <div class="col-md-4">{{ appointment_filter.form.doctor__name }}</div>
-                        <div class="col-md-3">{{ appointment_filter.form.disease }}</div>
-                        <div class="col-md-3">{{ appointment_filter.form.status }}</div>
-                        <div class="col-md-2">
-                            <div class="d-grid gap-2 d-lg-flex">
-                                <button type="submit" class="btn btn-primary flex-grow-1">Filter</button>
-                                <a href="{% url 'patient_appointments' %}?tab=appointments" class="btn btn-outline-secondary" title="Clear Filters"><i class="fas fa-times"></i></a>
+                <div class="mb-4">
+                    <button class="btn btn-primary d-lg-none w-100 mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#appointmentFilterMenu" aria-expanded="false" aria-controls="appointmentFilterMenu">
+                        <i class="fas fa-filter me-2"></i>Filters
+                    </button>
+                    <div class="collapse d-lg-block" id="appointmentFilterMenu">
+                        <form method="get">
+                            <input type="hidden" name="tab" value="appointments">
+                            <div class="row g-2">
+                                <div class="col-md-4">{{ appointment_filter.form.doctor__name }}</div>
+                                <div class="col-md-3">{{ appointment_filter.form.disease }}</div>
+                                <div class="col-md-3">{{ appointment_filter.form.status }}</div>
+                                <div class="col-md-2">
+                                    <div class="d-grid gap-2 d-lg-flex">
+                                        <button type="submit" class="btn btn-primary flex-grow-1">Filter</button>
+                                        <a href="{% url 'patient_appointments' %}?tab=appointments" class="btn btn-outline-secondary" title="Clear Filters"><i class="fas fa-times"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered align-middle">
                         <thead class="table-dark">
@@ -86,20 +93,27 @@
         <!-- Lab Tests Tab -->
         <div class="tab-pane fade {% if active_tab == 'lab-tests' %}show active{% endif %}" id="lab-tests" role="tabpanel" aria-labelledby="lab-tests-tab">
             <div class="card card-body border-top-0 rounded-bottom">
-                <form method="get" class="mb-4">
-                    <input type="hidden" name="tab" value="lab-tests">
-                    <div class="row g-2">
-                        <div class="col-md-4">{{ lab_test_filter.form.test_type }}</div>
-                        <div class="col-md-3">{{ lab_test_filter.form.location }}</div>
-                        <div class="col-md-3">{{ lab_test_filter.form.status }}</div>
-                        <div class="col-md-2">
-                            <div class="d-grid gap-2 d-lg-flex">
-                                <button type="submit" class="btn btn-primary flex-grow-1">Filter</button>
-                                <a href="{% url 'patient_appointments' %}?tab=lab-tests" class="btn btn-outline-secondary" title="Clear Filters"><i class="fas fa-times"></i></a>
+                <div class="mb-4">
+                    <button class="btn btn-primary d-lg-none w-100 mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#labTestFilterMenu" aria-expanded="false" aria-controls="labTestFilterMenu">
+                        <i class="fas fa-filter me-2"></i>Filters
+                    </button>
+                    <div class="collapse d-lg-block" id="labTestFilterMenu">
+                        <form method="get">
+                            <input type="hidden" name="tab" value="lab-tests">
+                            <div class="row g-2">
+                                <div class="col-md-4">{{ lab_test_filter.form.test_type }}</div>
+                                <div class="col-md-3">{{ lab_test_filter.form.location }}</div>
+                                <div class="col-md-3">{{ lab_test_filter.form.status }}</div>
+                                <div class="col-md-2">
+                                    <div class="d-grid gap-2 d-lg-flex">
+                                        <button type="submit" class="btn btn-primary flex-grow-1">Filter</button>
+                                        <a href="{% url 'patient_appointments' %}?tab=lab-tests" class="btn btn-outline-secondary" title="Clear Filters"><i class="fas fa-times"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered align-middle">
                         <thead class="table-dark">
